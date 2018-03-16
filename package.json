@@ -1,0 +1,32 @@
+{
+  "name": "dotbox",
+  "description": "",
+  "version": "v0.0.1",
+  "author": "Pehr Boman <unkelpehr@gmail.com>",
+  "homepage": "https://github.com/unkelpehr/dotbox",
+  "license": "MIT",
+  "main": "./dotbox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unkelpehr/dotbox.git"
+  },
+  "dependencies": {
+    "dotprop": "^1.0.2",
+    "lodash.clone": "^4.5.0"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0"
+  },
+  "scripts": {
+    "test": "ava",
+    "test:watch": "ava --watch",
+    "test:watch:verbose": "ava --watch --verbose"
+  },
+  "ava": {
+    "failFast": true,
+    "files": [
+      "tests/*.js"
+    ]
+  },
+  "keywords": []
+}
