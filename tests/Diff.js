@@ -215,19 +215,25 @@ test('Dot notation should not overwrite siblings even if `deepMerge` is set to f
 
 	assert.deepEqual(db.diff(), {
 		a: {
-			old: { b: 1 },
-			new: { b: 2 }
+			b: {
+				old: 1.1,
+				new: 1.2
+			},
+			c: 2.1
 		}
 	});
 
-	db.set('a.c', 2);
+	db.set('a.c', 2.2);
 
 	assert.deepEqual(db.diff(), {
 		a: {
-			old: undefined,
+			old: {
+				b: 1.1,
+				c: 2.1
+			},
 			new: {
-				b: 1,
-				c: 2
+				b: 1.2,
+				c: 2.2
 			}
 		}
 	});

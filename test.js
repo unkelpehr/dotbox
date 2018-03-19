@@ -1,35 +1,142 @@
 'use strict';
 
 const dotbox = require('./dotbox');
-
-const db = dotbox.make('');
-
 const datatypes = require('./datatypes');
 
-const data = datatypes.get(false);
+const db = dotbox.make('');
+const data2 = datatypes.get(false);
 
+const data = {
+	fooA: {
+		barA: {
+			quxA: 'fooA.barA.quxA',
+			quxB: 'fooA.barA.quxB',
+			quxC: 'fooA.barA.quxC'
+		},
 
-// db.set('Number.smallestSafeIntegerObject', data.get('Number.smallestSafeIntegerObject'));
+		barB: {
+			quxA: 'fooA.barB.quxA',
+			quxB: 'fooA.barB.quxB',
+			quxC: 'fooA.barB.quxC'
+		},
 
-// console.log('Number.smallestSafeIntegerObject', db.get('Number.smallestSafeIntegerObject'));
+		barC: {
+			quxA: 'fooA.barC.quxA',
+			quxB: 'fooA.barC.quxB',
+			quxC: 'fooA.barC.quxC'
+		},
+	},
 
-/* db.set(dotbox.AS_WRITTEN, {
-	'a.b': 1.1,
-	'a.c': 2.1
-});
+	fooB: {
+		barA: {
+			quxA: 'fooB.barA.quxA',
+			quxB: 'fooB.barA.quxB',
+			quxC: 'fooB.barA.quxC'
+		},
 
-db.set('a.b', 1.2);
+		barB: {
+			quxA: 'fooB.barB.quxA',
+			quxB: 'fooB.barB.quxB',
+			quxC: 'fooB.barB.quxC'
+		},
 
-db.set(dotbox.DEEP_MERGE, 'a', {
-	d: 3
-}); */
+		barC: {
+			quxA: 'fooB.barC.quxA',
+			quxB: 'fooB.barC.quxB',
+			quxC: 'fooB.barC.quxC'
+		},
+	},
 
-db.set(dotbox.AS_WRITTEN, {
-	'a.b': 1.1,
-	'a.c': 2.1
-});
+	fooC: {
+		barA: {
+			quxA: 'fooC.barA.quxA',
+			quxB: 'fooC.barA.quxB',
+			quxC: 'fooC.barA.quxC'
+		},
 
-db.set('a.b', 1.2);
+		barB: {
+			quxA: 'fooC.barB.quxA',
+			quxB: 'fooC.barB.quxB',
+			quxC: 'fooC.barB.quxC'
+		},
+
+		barC: {
+			quxA: 'fooC.barC.quxA',
+			quxB: 'fooC.barC.quxB',
+			quxC: 'fooC.barC.quxC'
+		},
+	},
+};
+
+const refmess = (function () {
+	function isObjectObject(thingy) {
+		return (
+			thingy != null &&
+			typeof thingy === 'object' &&
+			Array.isArray(thingy) === false &&
+			Object.prototype.toString.call(thingy) === '[object Object]'
+		);
+	}
+
+	function isPlainObject (thingy) {
+		if (!thingy || !isObjectObject(thingy)) {
+			return false;
+		}
+
+		const ctor = thingy.constructor;
+
+		// If has modified constructor
+		if (!ctor || typeof ctor !== 'function') {
+			return false;
+		}
+
+		const prot = ctor.prototype;
+
+		// If has modified prototype
+		if (!prot || !isObjectObject(prot)) {
+			return false;
+		}
+
+		// If constructor does not have an Object-specific method
+		if (!prot.hasOwnProperty('isPrototypeOf')) {
+			return false;
+		}
+
+		// Most likely a plain Object
+		return true;
+	};
+
+	return function refmess (object, allObjects, _seen) {
+		if (!isPlainObject(object)) {
+			return;
+		}
+
+		var seen = _seen || [];
+
+		var key;
+		var val;
+		
+		for (key in object) {
+			val = object[key];
+
+			if (isPlainObject(val) || (allObjects && typeof val === 'object')) {
+				if (seen.indexOf(val)) {
+					continue;
+				}
+
+				seen.push(val);
+				refmess(val, allObjects, seen);
+				val.refmess = 'refmess';
+			} else {
+				object[key] = 'refmess';
+			}
+		}
+	};
+}());
+
+refmess(data);
+
+return db._inspect(data);
 
 return db._inspect({
 	written: db.getWritten(),
@@ -37,11 +144,6 @@ return db._inspect({
 	diff: db.diff()
 });
 
-//return db._inspect({
-//	written: db.getWritten(),
-//	changes: db.getChanges(),
-//	diff: db.diff()
-//});
 data.walk((val, key, parentObject, path) => {
 	if (typeof val !== 'function') {
 		// console.log('set', path, typeof val);
