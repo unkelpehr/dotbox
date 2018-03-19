@@ -3,22 +3,10 @@
 const { test } = require('ava');
 const dotbox = require('../');
 
-const WRITTEN_DATA = Object.freeze({
-    a: { b: 1.1 },
-    c: { d: { e: 1.1 } },
-    f: { g: { h: { i: 1.1 } } }
-});
+const makedb = () => dotbox.make('test');
 
-const makedb = () => dotbox.make('test').set(dotbox.AS_WRITTEN, WRITTEN_DATA);
-
-function reftest (parent) {
-
-}
-
-test('Make sure changes are dereferenced.', assert => {
-    const db = makedb();
-
-    const data = {
+function getTestData () {
+    return {
         fooA: {
             barA: {
                 quxA: 'fooA.barA.quxA',
@@ -79,10 +67,113 @@ test('Make sure changes are dereferenced.', assert => {
             },
         },
     };
+}
 
-    db.set(data);
+const refmess = (function () {
+	function isObjectObject(thingy) {
+		return (
+			thingy != null &&
+			typeof thingy === 'object' &&
+			Array.isArray(thingy) === false &&
+			Object.prototype.toString.call(thingy) === '[object Object]'
+		);
+	}
 
-    assert.deepEqual(db.getChanges(false), data);
+	function isPlainObject (thingy) {
+		if (!thingy || !isObjectObject(thingy)) {
+			return false;
+		}
 
+		const ctor = thingy.constructor;
+
+		// If has modified constructor
+		if (!ctor || typeof ctor !== 'function') {
+			return false;
+		}
+
+		const prot = ctor.prototype;
+
+		// If has modified prototype
+		if (!prot || !isObjectObject(prot)) {
+			return false;
+		}
+
+		// If constructor does not have an Object-specific method
+		if (!prot.hasOwnProperty('isPrototypeOf')) {
+			return false;
+		}
+
+		// Most likely a plain Object
+		return true;
+	};
+
+	return function refmess (object, allObjects, _seen) {
+		if (!isPlainObject(object)) {
+			return;
+		}
+
+		var seen = _seen || [];
+
+		var key;
+		var val;
+		
+		for (key in object) {
+			val = object[key];
+
+			if (isPlainObject(val) || (allObjects && typeof val === 'object')) {
+				if (~seen.indexOf(val)) {
+					continue;
+				}
+
+				seen.push(val);
+				refmess(val, allObjects, seen);
+				val.refmess = 'refmess';
+			} else {
+				object[key] = 'refmess';
+			}
+		}
+	};
+}());
+
+/*------------------------------------*\
+	DEREFERENCE ON.
+\*------------------------------------*/
+test('Make sure input changes are dereferenced.', assert => {
+    const db = makedb();
+    const input = getTestData();
+
+    db.set(input);
+    refmess(input);
+    assert.deepEqual(db.getChanges(false), getTestData());
 });
 
+test('Make sure output changes are dereferenced.', assert => {
+    const db = makedb();
+    const input = getTestData();
+
+    db.set(input);
+    refmess(db.getChanges());
+    assert.deepEqual(db.getChanges(false), input);
+});
+
+test('Make sure input writes are dereferenced.', assert => {
+    const db = makedb();
+    const input = getTestData();
+
+    db.set(db.AS_WRITTEN, input);
+    refmess(input);
+    assert.deepEqual(db.getWritten(false), getTestData());
+});
+
+test('Make sure output writes are dereferenced.', assert => {
+    const db = makedb();
+    const input = getTestData();
+
+    db.set(db.AS_WRITTEN, input);
+    refmess(db.getWritten());
+    assert.deepEqual(db.getWritten(false), input);
+});
+
+/*------------------------------------*\
+	DEREFERENCE OFF.
+\*------------------------------------*/
