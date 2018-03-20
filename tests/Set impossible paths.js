@@ -12,7 +12,7 @@ test('CHANGE: New property is a child of an existing property that isn\'t an obj
 	db.set('a.b', 2);
 
 	assert.deepEqual(db.getChanges(false), {
-		a: {b: 2}
+		'a.b': 2
 	});
 });
 
@@ -37,7 +37,7 @@ test('CHANGE: New property is a nested child of an existing property that isn\'t
 	db.set('a.b.c.d', 2);
 
 	assert.deepEqual(db.getChanges(false), {
-		a: {b: {c: {d: 2}}}
+		'a.b.c.d': 2
 	});
 });
 

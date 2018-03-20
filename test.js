@@ -4,23 +4,61 @@ const dotbox = require('./dotbox');
 const datatypes = require('./datatypes');
 
 const db = dotbox.make('');
+const db2 = dotbox.make('');
 const data2 = datatypes.get(false);
 
-db.set('a', 'A');
-db.set('b', 'B');
+/* db.set('a', {
+	a: 1,
+	b: 2,
+	c: 3
+});
 
-db.set('c.c', 'CC');
-db.set('d.d', 'DD');
-db.set('e.e', 'EE');
+db.set('a.b.c', 4);
 
-console.log(db.getChangedKeys());
+return db._inspect({
+	written: db.getWritten(),
+	changes: db.getChanges(),
+	diff: db.diff()
+}); */
 
-let times = 1000000;
-console.time('getChangedKeys');
-while (times--) {
-	db.getChangedKeys()
-}
-console.timeEnd('getChangedKeys');
+const Benchmark = require('benchmark');
+const suite = new Benchmark.Suite;
+
+suite.add('db.set-original', () => {
+	const db = dotbox.make('');
+
+	db.set2('a', 1);
+	db.set2('a', 2);
+	
+	db.set2('a.b', 3);
+	db.set2('a.b.c', 4);
+	
+	db.set2('a.b', 1);
+	db.set2('a', {});
+});
+
+suite.add('db.set-new', () => {
+	const db = dotbox.make('');
+
+	db.set('a', 1);
+	db.set('a', 2);
+
+	db.set('a.b', 3);
+	db.set('a.b.c', 4);
+
+	db.set('a.b', 1);
+	db.set('a', {});
+});
+
+suite.on('cycle', function (event) {
+	console.log(String(event.target));
+});
+
+suite.on('complete', function () {
+	console.log('Fastest is ' + this.filter('fastest').map('name'));
+});
+
+suite.run({ 'async': true });
 
 return;
 return db._inspect({
