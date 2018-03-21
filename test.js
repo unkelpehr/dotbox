@@ -30,6 +30,27 @@ const testData = {
 	circArray: []
 };
 
+
+// db.set('a', 1);
+// db.set('a.b', 2);
+
+
+// db.set('a.b', {});
+// db.set('a.b.c', 2);
+
+
+db.set(dotbox.AS_WRITTEN, 'a.b', 2);
+db.set(dotbox.AS_WRITTEN, 'a', 1);
+
+
+
+return db._inspect({
+	get: db.get(),
+	written: db.getWritten(),
+	changes: db.getChanges(),
+	diff: db.diff()
+});
+
 const extend = require('./lib/extend');
 const extend2 = require('./lib/extend.1');
 

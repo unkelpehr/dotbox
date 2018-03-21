@@ -11,7 +11,7 @@ test('CHANGE: New property is a child of an existing property that isn\'t an obj
 	db.set('a', 1);
 	db.set('a.b', 2);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'a.b': 2
 	});
 });
@@ -23,7 +23,7 @@ test('CHANGE: New property is a parent of an existing property that isn\'t an ob
 	db.set('a.b', 2);
 	db.set('a', 1);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		a: 1
 	});
 });
@@ -36,7 +36,7 @@ test('CHANGE: New property is a nested child of an existing property that isn\'t
 	db.set('a.b.c', 1);
 	db.set('a.b.c.d', 2);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'a.b.c.d': 2
 	});
 });
@@ -48,8 +48,8 @@ test('CHANGE: New property is a nested parent of an existing property that isn\'
 	db.set('a.b.c.d', 1);
 	db.set('a.b.c', 2);
 
-	assert.deepEqual(db.getChanges(false), {
-		a: {b: {c: 2}}
+	assert.deepEqual(db.getChanges(), {
+		'a.b.c': 2
 	});
 });
 
@@ -88,12 +88,13 @@ test('Unnamed 1.', assert => {
 
 	db.set('a.b.c.b.c', 4);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'a.b.c': {
 			a: 1,
-			b: { c: 4 },
+			b: 2,
 			c: 3
-		}
+		},
+		'a.b.c.b.c': 4
 	});
 });
 
@@ -108,12 +109,13 @@ test('Unnamed 2.', assert => {
 
 	db.set('a.b.c', 4);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		a: {
 			a: 1,
-			b: { c: 4 },
+			b: 2,
 			c: 3
-		}
+		},
+		'a.b.c': 4
 	});
 });
 

@@ -144,7 +144,7 @@ test('Make sure input changes are dereferenced.', assert => {
 
     db.set(input);
     refmess(input);
-    assert.deepEqual(db.getChanges(false), getTestData());
+    assert.deepEqual(db.getChanges(), getTestData());
 });
 
 test('Make sure output changes are dereferenced.', assert => {
@@ -153,7 +153,7 @@ test('Make sure output changes are dereferenced.', assert => {
 
     db.set(input);
     refmess(db.getChanges());
-    assert.deepEqual(db.getChanges(false), input);
+    assert.deepEqual(db.getChanges(), input);
 });
 
 test('Make sure input writes are dereferenced.', assert => {

@@ -19,7 +19,7 @@ test('Integer. Once. KeyVal.', assert => {
 
 	db.set('a', 1.1);
 
-	assert.deepEqual(db.getChanges(false), {a: 1.1});
+	assert.deepEqual(db.getChanges(), {a: 1.1});
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -34,7 +34,7 @@ test('Flat object. Once.', assert => {
 
 	db.set(props);
 
-	assert.deepEqual(db.getChanges(false), props);
+	assert.deepEqual(db.getChanges(), props);
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -49,7 +49,7 @@ test('Nested object. Once.', assert => {
 
 	db.set(props);
 
-	assert.deepEqual(db.getChanges(false), props);
+	assert.deepEqual(db.getChanges(), props);
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -58,7 +58,7 @@ test('Dot notation. Once. KeyVal.', assert => {
 
 	db.set('f.g.h.i', 1.1);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'f.g.h.i': 1.1
 	});
 });
@@ -72,7 +72,7 @@ test('Dot notation. Once. Object.', assert => {
 		'f.g.h.i': 3.1
 	});
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'a.b': 1.1,
 		'c.d.e': 2.1,
 		'f.g.h.i': 3.1
@@ -90,7 +90,7 @@ test('Integer. Multi. KeyVal.', assert => {
 	db.set('a', 1.1);
 	db.set('a', 1.2);
 
-	assert.deepEqual(db.getChanges(false), {a: 1.2});
+	assert.deepEqual(db.getChanges(), {a: 1.2});
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -103,7 +103,7 @@ test('Flat object. Multi.', assert => {
 	db.set(props1);
 	db.set(props2);
 
-	assert.deepEqual(db.getChanges(false), props2);
+	assert.deepEqual(db.getChanges(), props2);
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -125,7 +125,7 @@ test('Nested object. Multi.', assert => {
 	db.set(props1);
 	db.set(props2);
 
-	assert.deepEqual(db.getChanges(false), props2);
+	assert.deepEqual(db.getChanges(), props2);
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -135,7 +135,7 @@ test('Dot notation. Multi. KeyVal.', assert => {
 	db.set('f.g.h.i', 1.1);
 	db.set('f.g.h.i', 1.2);
 
-	assert.deepEqual(db.getChanges(false), {'f.g.h.i': 1.2});
+	assert.deepEqual(db.getChanges(), {'f.g.h.i': 1.2});
 	assert.deepEqual(db.getWritten(false), WRITTEN_DATA, 'Setting changes should not effect the written data.');
 });
 
@@ -157,7 +157,7 @@ test('Dot notation. Multi. Object.', assert => {
 	db.set(props1);
 	db.set(props2);
 
-	assert.deepEqual(db.getChanges(false), {
+	assert.deepEqual(db.getChanges(), {
 		'a.b': 1.2,
 		'c.d.e': 2.2,
 		'f.g.h.i': 3.2
