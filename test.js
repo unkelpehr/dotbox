@@ -8,6 +8,7 @@ const db2 = dotbox.make('');
 const data2 = datatypes.get(false);
 
 const isPlainObject = require('./lib/isPlainObject');
+const patch = require('./lib/patch');
 
 const testData = {
 	a: 'b',
@@ -31,16 +32,9 @@ const testData = {
 };
 
 
-// db.set('a', 1);
-// db.set('a.b', 2);
 
-
-// db.set('a.b', {});
-// db.set('a.b.c', 2);
-
-
-db.set(dotbox.AS_WRITTEN, 'a.b', 2);
-db.set(dotbox.AS_WRITTEN, 'a', 1);
+db.set('a.b', 1);
+db.set('a.c', 2);
 
 
 
