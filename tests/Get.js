@@ -9,7 +9,7 @@ test('Get everything.', assert => {
 	const db = makedb();
 
 	db.set('a.b.c', 1);
-	db.set(dotbox.AS_WRITTEN, 'd.e.f', 2);
+	db.set(db.WRITE, 'd.e.f', 2);
 
 	assert.deepEqual(db.get(), {
 		a: {b: {c: 1}},
@@ -21,7 +21,7 @@ test('Get everything, but no changes.', assert => {
 	const db = makedb();
 
 	db.set('a.b.c', 1);
-	db.set(dotbox.AS_WRITTEN, 'd.e.f', 2);
+	db.set(db.WRITE, 'd.e.f', 2);
 
 	assert.deepEqual(db.get(false), {
 		// a: {b: {c: 1}},
@@ -32,7 +32,7 @@ test('Get everything, but no changes.', assert => {
 test('Get top level value, including and exluding changes.', assert => {
 	const db = makedb();
 
-	db.set(dotbox.AS_WRITTEN, {
+	db.set(db.WRITE, {
 		'a.b': 1.1,
 		'c.d': 2.1,
 		'e.f': 3.1
@@ -49,7 +49,7 @@ test('Get top level value, including and exluding changes.', assert => {
 test('Get nested value, including and exluding changes.', assert => {
 	const db = makedb();
 
-	db.set(dotbox.AS_WRITTEN, {
+	db.set(db.WRITE, {
 		'a.b': 1.1,
 		'c.d': 2.1,
 		'e.f': 3.1

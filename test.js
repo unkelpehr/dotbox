@@ -35,10 +35,30 @@ function getTestData() {
 	return testData;
 };
 
-const db = dotbox.make('');
+suite.add('createDocument1', () => {
+	dotbox.createDocument1({});
+});
 
-db.set(getTestData());
+suite.add('createDocument2', () => {
+	dotbox.createDocument2({});
+});
 
-dotbox._inspect(db.changes);
+suite.on('cycle', function (event) {
+	console.log(String(event.target));
+});
 
-// dotbox._inspect(dotbox.dottify(getTestData()));
+suite.on('complete', function () {
+	const fastest = this.filter('fastest')[0];
+	const slowest = this.filter('slowest')[0];
+
+	console.log('');
+	console.log('Fastest is ' + this.filter('fastest').map('name'));
+
+	if (slowest) {
+		const perc = Math.round((((fastest.hz / slowest.hz) - 1) * 100) * 10) / 10;
+
+		console.log(`${fastest.name} is ${perc}% faster than ${slowest.name}`);
+	}
+});
+
+suite.run({ 'async': true });

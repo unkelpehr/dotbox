@@ -206,7 +206,7 @@ test('Dot notation should not overwrite siblings even if `deepMerge` is set to f
 test('Dot notation should not overwrite siblings even if `deepMerge` is set to false (one level, w/ written)', assert => {
 	const db = makedb();
 
-	db.set(dotbox.AS_WRITTEN, {
+	db.set(dotbox.WRITE, {
 		'a.b': 1.1,
 		'a.c': 2.1
 	});

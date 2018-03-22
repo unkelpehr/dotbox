@@ -11,7 +11,7 @@ test('CHANGE: New property is a child of an existing property that isn\'t an obj
 	db.set('a', 1);
 	db.set('a.b', 2);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		'a.b': 2
 	});
 });
@@ -23,7 +23,7 @@ test('CHANGE: New property is a parent of an existing property that isn\'t an ob
 	db.set('a.b', 2);
 	db.set('a', 1);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		a: 1
 	});
 });
@@ -36,7 +36,7 @@ test('CHANGE: New property is a nested child of an existing property that isn\'t
 	db.set('a.b.c', 1);
 	db.set('a.b.c.d', 2);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		'a.b.c.d': 2
 	});
 });
@@ -48,7 +48,7 @@ test('CHANGE: New property is a nested parent of an existing property that isn\'
 	db.set('a.b.c.d', 1);
 	db.set('a.b.c', 2);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		'a.b.c': 2
 	});
 });
@@ -58,10 +58,10 @@ test('CHANGE: New property is a nested parent of an existing property that isn\'
 test('WRITE: New property is a child of an existing property that isn\'t an object.', assert => {
 	const db = makedb();
 
-	db.set(dotbox.AS_WRITTEN, 'a', 1);
-	db.set(dotbox.AS_WRITTEN, 'a.b', 2);
+	db.set(db.WRITE, 'a', 1);
+	db.set(db.WRITE, 'a.b', 2);
 
-	assert.deepEqual(db.getWritten(false), {
+	assert.deepEqual(db.get(false), {
 		a: {b: 2}
 	});
 });
@@ -69,10 +69,10 @@ test('WRITE: New property is a child of an existing property that isn\'t an obje
 test('WRITE: New property is a parent of an existing property that isn\'t an object.', assert => {
 	const db = makedb();
 
-	db.set(dotbox.AS_WRITTEN, 'a.b', 2);
-	db.set(dotbox.AS_WRITTEN, 'a', 1);
+	db.set(db.WRITE, 'a.b', 2);
+	db.set(db.WRITE, 'a', 1);
 
-	assert.deepEqual(db.getWritten(false), {
+	assert.deepEqual(db.get(false), {
 		a: 1
 	});
 });
@@ -88,7 +88,7 @@ test('Unnamed 1.', assert => {
 
 	db.set('a.b.c.b.c', 4);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		'a.b.c': {
 			a: 1,
 			b: 2,
@@ -109,7 +109,7 @@ test('Unnamed 2.', assert => {
 
 	db.set('a.b.c', 4);
 
-	assert.deepEqual(db.getChanges(), {
+	assert.deepEqual(db.changes, {
 		a: {
 			a: 1,
 			b: 2,
@@ -122,15 +122,15 @@ test('Unnamed 2.', assert => {
 test('Unnamed 3.', assert => {
 	const db = makedb();
 
-	db.set(db.AS_WRITTEN, 'a.b.c', {
+	db.set(db.WRITE, 'a.b.c', {
 		a: 1,
 		b: 2,
 		c: 3
 	});
 
-	db.set(db.AS_WRITTEN, 'a.b.c.b.c', 4);
+	db.set(db.WRITE, 'a.b.c.b.c', 4);
 
-	assert.deepEqual(db.getWritten(false), {
+	assert.deepEqual(db.get(false), {
 		a: {
 			b: {
 				c: {
@@ -146,15 +146,15 @@ test('Unnamed 3.', assert => {
 test('Unnamed 4.', assert => {
 	const db = makedb();
 
-	db.set(db.AS_WRITTEN, 'a', {
+	db.set(db.WRITE, 'a', {
 		a: 1,
 		b: 2,
 		c: 3
 	});
 
-	db.set(db.AS_WRITTEN, 'a.b.c', 4);
+	db.set(db.WRITE, 'a.b.c', 4);
 
-	assert.deepEqual(db.getWritten(false), {
+	assert.deepEqual(db.get(false), {
 		a: {
 			a: 1,
 			b: { c: 4 },
