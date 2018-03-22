@@ -25,15 +25,17 @@ function clearSeen() {
     seen.length = 0;
 }
 
-function dottify (object, target, prefix, seen) {
+function dottify(object, target, prefix, seen) {
     for (const key in object) {
         const path = prefix + key;
         const val = object[key];
 
-        if (!isObject(val)) {
+        const isSeen = seen.indexOf(val) !== -1;
+
+        if (!isSeen && !isObject(val)) {
             target[path] = extend(val);
         } else {
-            if (seen.indexOf(val) !== -1) {
+            if (isSeen) {
                 target[path] = {};
             } else {
                 seen.push(val);
@@ -45,7 +47,7 @@ function dottify (object, target, prefix, seen) {
     return target;
 }
 
-module.exports = (object) => {
+module.exports = object => {
     const target = {};
 
     dottify(object, target, '', []);
