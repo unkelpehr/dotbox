@@ -10,10 +10,7 @@
     "type": "git",
     "url": "https://github.com/unkelpehr/dotbox.git"
   },
-  "dependencies": {
-    "dotprop": "^1.0.2",
-    "lodash.clone": "^4.5.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "ava": "^0.22.0",
     "benchmark": "^2.1.4"

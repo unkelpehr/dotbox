@@ -35,12 +35,24 @@ function getTestData() {
 	return testData;
 };
 
-suite.add('createDocument1', () => {
-	dotbox.createDocument1({});
+const db = dotbox.createDocument();
+
+db.set('a', 1);
+db.set('b', 2);
+db.set('c.d', 3);
+
+dotbox._inspect({
+	changelog: db.changelog
+})
+
+return;
+
+suite.add('dir1', () => {
+	dir1('aaa.bbb.ccc.ddd.eee', -1);
 });
 
-suite.add('createDocument2', () => {
-	dotbox.createDocument2({});
+suite.add('dir2', () => {
+	dir2('aaa.bbb.ccc.ddd.eee', -1);
 });
 
 suite.on('cycle', function (event) {

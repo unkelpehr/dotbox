@@ -3,7 +3,7 @@
 const {test} = require('ava');
 const dotbox = require('../');
 
-const makedb = () => dotbox.make('test');
+const makedb = () => dotbox.createDocument('test');
 
 test('Return empty array if no changes has been made.', assert => {
 	const db = makedb();

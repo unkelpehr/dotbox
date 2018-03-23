@@ -3,7 +3,7 @@
 const { test } = require('ava');
 const dotbox = require('../');
 
-const makedb = () => dotbox.make('test');
+const makedb = () => dotbox.createDocument('test');
 
 function getTestData () {
     return {

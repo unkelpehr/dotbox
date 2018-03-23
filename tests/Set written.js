@@ -9,7 +9,7 @@ const CHANGES_DATA = Object.freeze({
     f: {g: {h: {i: 1.1}}}
 });
 
-const makedb = () => dotbox.make('test').set(CHANGES_DATA);
+const makedb = () => dotbox.createDocument('test').set(CHANGES_DATA);
 
 /*------------------------------------*\
 	ONE CALL.

@@ -3,7 +3,7 @@
 const {test} = require('ava');
 const dotbox = require('../');
 
-const makedb = () => dotbox.make('test');
+const makedb = () => dotbox.createDocument('test');
 
 test('CHANGE: New property is a child of an existing property that isn\'t an object.', assert => {
 	const db = makedb();

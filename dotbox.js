@@ -2,23 +2,17 @@
 
 const dotbox = module.exports = {};
 
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
+const lib = path.join(__dirname, 'lib');
 
-dotbox.Database = require('./lib/Database');
-dotbox.dottify = require('./lib/dottify');
-dotbox.extend = require('./lib/extend');
-dotbox.flags = require('./lib/flags');
-dotbox.isPlainObject = require('./lib/isPlainObject');
-dotbox.normalize = require('./lib/normalize');
-dotbox.patch = require('./lib/patch');
-dotbox.createDocument2 = require('./lib/createDocument');
-
-dotbox.make = (...args) => dotbox.createDocument2(...args);
+fs.readdirSync(lib).forEach(file => {
+    dotbox[file.replace(/\.[^/.]+$/, '')] = require(path.join(lib, file));
+});
 
 dotbox._inspect = value => {
-    console.log(require('util').inspect(value, { depth: null, colors: true, breakLength: 2 }), '\n');
+    console.log(util.inspect(value, {depth: null, colors: true, breakLength: 0}), '\n');
 };
-
-dotbox.createDocument1 = opts => new dotbox.Database(opts);
-
 
 Object.assign(dotbox, dotbox.flags);

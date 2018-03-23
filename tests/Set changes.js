@@ -9,7 +9,7 @@ const WRITTEN_DATA = Object.freeze({
     f: {g: {h: {i: 1.1}}}
 });
 
-const makedb = () => dotbox.make('test').set(dotbox.WRITE, WRITTEN_DATA);
+const makedb = () => dotbox.createDocument('test').set(dotbox.WRITE, WRITTEN_DATA);
 
 /*------------------------------------*\
 	ONE CALL.
