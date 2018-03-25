@@ -10,7 +10,9 @@
     "type": "git",
     "url": "https://github.com/unkelpehr/dotbox.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dot-prop": "^4.2.0"
+  },
   "devDependencies": {
     "ava": "^0.22.0",
     "benchmark": "^2.1.4"

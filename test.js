@@ -35,24 +35,17 @@ function getTestData() {
 	return testData;
 };
 
-const db = dotbox.createDocument();
-
-db.set('a', 1);
-db.set('b', 2);
-db.set('c.d', 3);
-
-dotbox._inspect({
-	changelog: db.changelog
-})
-
+dotbox.subdir(9);
 return;
 
-suite.add('dir1', () => {
-	dir1('aaa.bbb.ccc.ddd.eee', -1);
+const path = 'foo.bar';
+
+suite.add('isNested1', () => {
+	isNested1(path);
 });
 
-suite.add('dir2', () => {
-	dir2('aaa.bbb.ccc.ddd.eee', -1);
+suite.add('isNested2', () => {
+	isNested2(path);
 });
 
 suite.on('cycle', function (event) {
