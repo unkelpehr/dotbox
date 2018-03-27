@@ -1,45 +1,56 @@
 'use strict';
 
-const isPlainObject = require('./isPlainObject');
+const extend = require('./extend');
+const isObject = require('./isPlainObject');
 
-/**
- * TODO.
- * @param {Object} object
- * @param {Object} [_target=]
- * @param {String} [_prefix='']
- * @return {Object}
- */
-function dottify (object, _target, _prefix) {
-    let i;
+const kSeen = Symbol('Circular reference guard');
 
-    const keys = Object.keys(object).sort();
-    const target = _target || {};
-    const prefix = _prefix ? (_prefix + '.') : '';
+const seen = [];
 
-    for (i = 0; i < keys.length; ++i) {
-        const key = keys[i];
+function setSeen(object) {
+    // object[kSeen] = 1;
+    seen.push(object);
+}
+
+function hasSeen(object) {
+    return seen.indexOf(object) !== -1;
+    return object[kSeen];
+}
+
+function clearSeen() {
+    for (let i = 0; i < seen.length; ++i) {
+        delete seen[i][kSeen];
+    }
+
+    seen.length = 0;
+}
+
+function dottify (object, target, prefix, seen) {
+    for (const key in object) {
+        const path = prefix + key;
         const val = object[key];
 
-        const path = prefix + key;
-        const type = typeof val;
-
-        if (type === 'function') {
-            throw new TypeError(`Invalid data type '${type}' for property '${path}'`);
-        }
-
-        if (target[key]) {
-            dottify(target[key], target, key);
-            delete target[key];
-        }
-
-        if (isPlainObject(val)) {
-            dottify(val, target, path);
+        if (!isObject(val)) {
+            target[path] = extend(val);
         } else {
-            target[path] = clone(val);
+            if (seen.indexOf(val) !== -1) {
+                target[path] = {};
+            } else {
+                seen.push(val);
+                dottify(val, target, path + '.', seen);
+            }
         }
     }
 
     return target;
 }
 
-module.exports = dottify;
+module.exports = (object) => {
+    const target = {};
+
+    dottify(object, target, '', []);
+
+    // clearSeen();
+
+    return target;
+};

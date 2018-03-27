@@ -35,17 +35,18 @@ function getTestData() {
 	return testData;
 };
 
-dotbox.subdir(9);
-return;
+const value = 0;
 
-const path = 'foo.bar';
+suite.add('typeof is string', () => {
+	if (typeof value === 'string') {
 
-suite.add('isNested1', () => {
-	isNested1(path);
+	}
 });
 
-suite.add('isNested2', () => {
-	isNested2(path);
+suite.add('Is integer', () => {
+	if (Number.isInteger(value)) {
+
+	}
 });
 
 suite.on('cycle', function (event) {
