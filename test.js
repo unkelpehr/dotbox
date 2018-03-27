@@ -35,6 +35,22 @@ function getTestData() {
 	return testData;
 };
 
+const get = require('./lib/get');
+
+const object = Object.create({
+	proto1: 'prototype property',
+	proto2: {
+		foo: 'bar'
+	}
+}, {
+	ownProperty: {
+		value: 'non-enumerable own property'
+	}
+});
+
+console.log(get(object, 'constructor', true));
+
+return;
 const value = 0;
 
 suite.add('typeof is string', () => {
