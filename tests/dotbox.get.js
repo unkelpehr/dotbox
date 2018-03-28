@@ -78,7 +78,7 @@ test('Should work with inherited properties, as default.', assert => {
 	assert.deepEqual(get(object, 'proto2'), { foo: 'bar' });
 	assert.deepEqual(get(object, 'proto2.foo'), 'bar');
 
-	assert.deepEqual(get(object, 'proto1', true), undefined);
-	assert.deepEqual(get(object, 'proto2', true), undefined);
-	assert.deepEqual(get(object, 'proto2.foo', true), undefined);
+	assert.deepEqual(get(true, object, 'proto1'), undefined);
+	assert.deepEqual(get(true, object, 'proto2'), undefined);
+	assert.deepEqual(get(true, object, 'proto2.foo'), undefined);
 });

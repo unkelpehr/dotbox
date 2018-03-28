@@ -1,10 +1,10 @@
 'use strict';
 
 const { test } = require('ava');
-const { patch, flags } = require('../');
+const { set, flags } = require('../');
 
-function testPatch (assert, bitmask, target, source, expectation) {
-	target = patch(bitmask, target, source);
+function testSet (assert, bitmask, target, source, expectation) {
+	target = set(bitmask, target, source);
 
 	assert.deepEqual(target, expectation);
 }
@@ -13,7 +13,7 @@ test('Replace', assert => {
 	let target;
 
 	// -------------------------------------
-	testPatch(assert, 0, {
+	testSet(assert, 0, {
 		
 	},{
 		
@@ -22,7 +22,7 @@ test('Replace', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, 0,
+	testSet(assert, 0,
 	{ // target
 		a: 0,
 		b: 0,
@@ -40,7 +40,7 @@ test('Replace', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, 0,
+	testSet(assert, 0,
 	{ // target
 		a: {
 			bla: 'bar'
@@ -76,7 +76,7 @@ test('Shallow merge', assert => {
 	let target;
 
 	// -------------------------------------
-	testPatch(assert, flags.SMERGE, {
+	testSet(assert, flags.SMERGE, {
 		
 	},{
 		
@@ -85,7 +85,7 @@ test('Shallow merge', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.SMERGE,
+	testSet(assert, flags.SMERGE,
 	{ // target
 		a: 0,
 		b: 0,
@@ -103,7 +103,7 @@ test('Shallow merge', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.SMERGE,
+	testSet(assert, flags.SMERGE,
 	{ // target
 		a: {
 			bla: 'bar'
@@ -135,7 +135,7 @@ test('Shallow merge', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.SMERGE,
+	testSet(assert, flags.SMERGE,
 	{ // target
 		a: {
 			a1: 'a1'
@@ -183,7 +183,7 @@ test('Shallow merge', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.SMERGE,
+	testSet(assert, flags.SMERGE,
 	{ // target
 	},{ // source
 		a: {},
@@ -219,7 +219,7 @@ test('Deep merge - shallow data', assert => {
 	let target;
 
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE, {
+	testSet(assert, flags.DMERGE, {
 		
 	},{
 		
@@ -228,7 +228,7 @@ test('Deep merge - shallow data', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE,
+	testSet(assert, flags.DMERGE,
 	{ // target
 		a: 0,
 		b: 0,
@@ -246,7 +246,7 @@ test('Deep merge - shallow data', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE,
+	testSet(assert, flags.DMERGE,
 	{ // target
 		a: {
 			bla: 'bar'
@@ -278,7 +278,7 @@ test('Deep merge - shallow data', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE,
+	testSet(assert, flags.DMERGE,
 	{ // target
 		a: {
 			a1: 'a1'
@@ -326,7 +326,7 @@ test('Deep merge - shallow data', assert => {
 	});
 	
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE,
+	testSet(assert, flags.DMERGE,
 	{ // target
 	},{ // source
 		a: {},
@@ -359,7 +359,7 @@ test('Deep merge - shallow data', assert => {
 
 test('Deep merge - deep data', assert => {
 	// -------------------------------------
-	testPatch(assert, flags.DMERGE,
+	testSet(assert, flags.DMERGE,
 	{ // target
 		a: {
 			a1: {
@@ -465,7 +465,7 @@ test('Combinations', assert => {
 	const target = {};
 
 
-	testPatch(assert, flags.DMERGE, target, {
+	testSet(assert, flags.DMERGE, target, {
 		a: 1,
 		b: {},
 	},{
@@ -473,7 +473,7 @@ test('Combinations', assert => {
 		b: {},
 	});
 	
-	testPatch(assert, flags.DMERGE, target, {
+	testSet(assert, flags.DMERGE, target, {
 		a: 1,
 		b: {
 			a: 1,
@@ -487,7 +487,7 @@ test('Combinations', assert => {
 		},
 	});
 
-	testPatch(assert, flags.SMERGE, target, {
+	testSet(assert, flags.SMERGE, target, {
 		b: {
 			a: 1,
 			b: 2,
@@ -502,7 +502,7 @@ test('Combinations', assert => {
 		},
 	});
 
-	testPatch(assert, 0, target, {
+	testSet(assert, 0, target, {
 		a: null,
 		b: null,
 	},{
@@ -511,7 +511,7 @@ test('Combinations', assert => {
 	});
 	
 
-	testPatch(assert, 0, target, {
+	testSet(assert, 0, target, {
 		a: {
 			a: 1
 		},
