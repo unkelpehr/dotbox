@@ -35,9 +35,56 @@ function getTestData() {
 	return testData;
 };
 
-const normalize = require('./lib/normalize');
+const flatten = require('./lib/flatten');
 
-const isPlainObject = require('./lib/isPlainObject');
+const db = dotbox.createDocument();
+
+db.set('a.b.c', 1);
+db.set('a.b.c.d', 2);
+
+
+
+dotbox._inspect({
+	changes: db.changes,
+	get: db.get()
+});
+
+
+return;
+dotbox._inspect(flatten(1, {
+	a: 'a',
+	b: {
+		c: 1,
+		d: {
+			e: {
+				f: 1,
+				g: 2,
+				h: 3
+			},
+
+			f: 2,
+			g: 3
+		}
+	},
+	c: {
+		d: {
+			e: {
+				f: 1
+			}
+		}
+	},
+	d: {
+		e: {
+			f: {
+				g: 1,
+				h: {
+					i: 1,
+					j: 2
+				}
+			}
+		}
+	}
+}));
 
 function normalize2 (source, target) {
 	target = target || {};
@@ -100,7 +147,7 @@ const object = {
 	'a.b': 1
 };
 
-const db = dotbox.createDocument();
+// const db = dotbox.createDocument();
 
 db.set(object);
 

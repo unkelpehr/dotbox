@@ -8,7 +8,9 @@ const path = require('path');
 const lib = path.join(__dirname, 'lib');
 
 fs.readdirSync(lib).forEach(file => {
-    dotbox[file.replace(/\.[^/.]+$/, '')] = require(path.join(lib, file));
+    if (file[0] !== '_') {
+        dotbox[file.replace(/\.[^/.]+$/, '')] = require(path.join(lib, file));
+    }
 });
 
 dotbox._inspect = value => {
