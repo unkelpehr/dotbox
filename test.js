@@ -39,14 +39,32 @@ const flatten = require('./lib/flatten');
 
 const db = dotbox.createDocument();
 
-db.set('a.b.c', 1);
+db.set('a.b.c', {});
 db.set('a.b.c.d', 2);
+db.set('a.b.c.e', 3);
+db.set('a.b.c.f', {
+	g: 4,
+	h: 5
+});
 
+//db.set(dotbox.DMERGE, 'a.b.c', {});
+
+// db.set('jobo18', {
+// 	names: {
+// 		first: 'Jonas',
+// 		last: 'Boman',
+// 	}
+// });
+
+// db.set({
+// 	'jobo18.names.nickname1': 'upehr',
+// 	'jobo18.names.nickname2': 'upehr2',
+// });
 
 
 dotbox._inspect({
 	changes: db.changes,
-	get: db.get()
+	// get: db.get(),
 });
 
 
