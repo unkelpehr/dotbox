@@ -8,6 +8,7 @@ const _flags = {
 	WRITE: 4,
 	DMERGE: 8,
 	SMERGE: 16,
+	DELETE: 32,
 };
 
 test('extend', assert => {
@@ -24,6 +25,7 @@ test('parse', assert => {
 		WRITE: false,
 		DMERGE: false,
 		SMERGE: false,
+		DELETE: false,
 	});
 
 	assert.deepEqual(flags.parse(flags.KEEPR), {
@@ -31,6 +33,7 @@ test('parse', assert => {
 		WRITE: false,
 		DMERGE: false,
 		SMERGE: false,
+		DELETE: false,
 	});
 
 	assert.deepEqual(flags.parse(flags.KEEPR | flags.WRITE), {
@@ -38,6 +41,7 @@ test('parse', assert => {
 		WRITE: true,
 		DMERGE: false,
 		SMERGE: false,
+		DELETE: false,
 	});
 
 	assert.deepEqual(flags.parse(flags.KEEPR | flags.WRITE | flags.DMERGE), {
@@ -45,6 +49,7 @@ test('parse', assert => {
 		WRITE: true,
 		DMERGE: true,
 		SMERGE: false,
+		DELETE: false,
 	});
 
 	assert.deepEqual(flags.parse(flags.KEEPR | flags.WRITE | flags.DMERGE | flags.SMERGE), {
@@ -52,5 +57,14 @@ test('parse', assert => {
 		WRITE: true,
 		DMERGE: true,
 		SMERGE: true,
+		DELETE: false,
+	});
+
+	assert.deepEqual(flags.parse(flags.KEEPR | flags.WRITE | flags.DMERGE | flags.SMERGE | flags.DELETE), {
+		KEEPR: true,
+		WRITE: true,
+		DMERGE: true,
+		SMERGE: true,
+		DELETE: true,
 	});
 });

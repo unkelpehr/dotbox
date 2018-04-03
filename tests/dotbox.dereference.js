@@ -67,7 +67,7 @@ test('Unnamed 3', assert => {
 				b: false,
 				c: true,
 				d: null,
-			//	e: undefined,
+				e: undefined,
 				f: new Array(),
 				g: new String(),
 				h: {}

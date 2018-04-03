@@ -35,17 +35,20 @@ function getTestData() {
 	return testData;
 };
 
+function getTestData2 () {
+	return {
+		u: 'v'
+	};
+}
+
 const flatten = require('./lib/flatten');
 
 const db = dotbox.createDocument();
 
-db.set('a.b.c', {});
-db.set('a.b.c.d', 2);
-db.set('a.b.c.e', 3);
-db.set('a.b.c.f', {
-	g: 4,
-	h: 5
-});
+db.set('foo.bar', 'qux');
+
+db.unset('foo.bar');
+
 
 //db.set(dotbox.DMERGE, 'a.b.c', {});
 
@@ -63,6 +66,7 @@ db.set('a.b.c.f', {
 
 
 dotbox._inspect({
+	written: db.written,
 	changes: db.changes,
 	// get: db.get(),
 });
